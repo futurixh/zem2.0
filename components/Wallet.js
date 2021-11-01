@@ -1,19 +1,56 @@
 import React from 'react'
 import { StyleSheet, View, TextInput, Button, Text, FlatList, Image, TouchableHighlight } from 'react-native'
-import courses from '../Helpers/courseData'
+// import courses from '../Helpers/courseData'
 import CourseItem from '../Helpers/courseItem'
 import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 import { getFilmsFromApiWithSearchedText } from '../API/TMDBApi'
+const axios = require('axios').default;
+
+const url = "https://jsonplaceholder.typicode.com/posts/1";
+const myUrl = "https://bencozem2.herokuapp.com/api/course";
+
+let dataTr = "basic";
 
 class Wallet extends React.Component {
 
     constructor(props) {
-        super(props)
-        this.state = { films: [] }
+      super(props)
+      this.state = { films: [] }
+      this.testAxios()
     }
+
+    testAxios =  async () => {
+      try {
+        await axios({
+          method: 'GET',
+          url: url,
+          timeout: 3000,
+          headers: {
+            'Access-Control-Allow-Origin' : '*',
+            'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          }
+        }).then(function (response) {
+          // alert(JSON.stringify(response.data));
+    
+          dataTr = response.data.title;
+          console.log("Data ", dataTr);
+    
+        })
+        .catch(function (error) {
+          // alert(error.message);
+          console.log("Error in axios", error);
+          // return "error axios";
+        });
+          // return "ok axios";
+    
+      } catch (error) {
+        alert(error.message);
+        return "error axios";
+      }
+    };
     
     _loadFilms() {
-        getFilmsFromApiWithSearchedText("star").then(data => this.setState({ films: data.results }));
+      getFilmsFromApiWithSearchedText("star").then(data => this.setState({ films: data.results }));
     }
 
     render() {
@@ -63,6 +100,7 @@ class Wallet extends React.Component {
         </View>
         <View style={styles.releve}>
           <Text style={styles.title_releve}>TRANSACTIONS RECENTES</Text>
+          <Text style={styles.title_releve}>test zone : {dataTr}</Text>
           <FlatList
             style={styles.list_releve}
             data={this.state.films}
