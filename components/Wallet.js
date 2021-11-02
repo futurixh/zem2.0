@@ -2,51 +2,30 @@ import React from 'react'
 import { StyleSheet, View, TextInput, Button, Text, FlatList, Image, TouchableHighlight } from 'react-native'
 // import courses from '../Helpers/courseData'
 import CourseItem from '../Helpers/courseItem'
-import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
-import { getFilmsFromApiWithSearchedText } from '../API/TMDBApi'
-const axios = require('axios').default;
+import { Avatar, Badge, Icon, withBadge } from 'react-native-elements';
 
-const url = "https://jsonplaceholder.typicode.com/posts/1";
-const myUrl = "https://bencozem2.herokuapp.com/api/course";
+import { getFilmsFromApiWithSearchedText } from '../API/TMDBApi';
+import { getData, testdata} from '../API/services';
 
-let dataTr = "basic";
 
 class Wallet extends React.Component {
 
     constructor(props) {
       super(props)
-      this.state = { films: [] }
-      this.testAxios()
+      this.state = { 
+        films: [],
+        courses: [],
+        _label : 'hey'
+      }
+      // test('Beaudelaire');
     }
 
-    testAxios =  async () => {
-      try {
-        await axios({
-          method: 'GET',
-          url: url,
-          timeout: 3000,
-          headers: {
-            'Access-Control-Allow-Origin' : '*',
-            'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-          }
-        }).then(function (response) {
-          // alert(JSON.stringify(response.data));
-    
-          dataTr = response.data.title;
-          console.log("Data ", dataTr);
-    
-        })
-        .catch(function (error) {
-          // alert(error.message);
-          console.log("Error in axios", error);
-          // return "error axios";
-        });
-          // return "ok axios";
-    
-      } catch (error) {
-        alert(error.message);
-        return "error axios";
-      }
+    _testAxios () {
+      getData('course').then(data => { 
+        // this.setState({ _label: data.title })
+        this.setState({ courses: data.ressources })
+        console.log("Getting data ", data.ressources)
+      });
     };
     
     _loadFilms() {
@@ -60,7 +39,7 @@ class Wallet extends React.Component {
         <View style={{ flex: 1, flexDirection: 'row'}}>
             <View style={{ flex: 6,}}>
                 <Text style={styles.title}>Hello</Text> 
-                <Button title='Rechercher' onPress={() => this._loadFilms()}/>
+                <Button title='Rechercher' onPress={() => this._testAxios()}/>
             </View>
             <View style={{ flex: 1,}}>
                 <Avatar
@@ -100,11 +79,11 @@ class Wallet extends React.Component {
         </View>
         <View style={styles.releve}>
           <Text style={styles.title_releve}>TRANSACTIONS RECENTES</Text>
-          <Text style={styles.title_releve}>test zone : {dataTr}</Text>
+          {/* <Text style={styles.title_releve}>test zone : {this.state._label}</Text> */}
           <FlatList
             style={styles.list_releve}
-            data={this.state.films}
-            keyExtractor={(item) => item.id.toString()}
+            data={this.state.courses}
+            keyExtractor={(item) => item._id.toString()}
             renderItem={({item}) => <CourseItem course={item}/>}
           />
         </View>

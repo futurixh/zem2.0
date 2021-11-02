@@ -11,8 +11,8 @@ class CourseItem extends React.Component {
           <ListItem style={styles.listItem} bottomDivider>
             <Avatar rounded style={styles.image} source={{uri: "image"}}/>
             <ListItem.Content>
-              <ListItem.Title style={styles.title}>{course.title}</ListItem.Title>
-              <ListItem.Subtitle>{course.release_date}</ListItem.Subtitle>
+              <ListItem.Title style={styles.title}>{course.clientId}</ListItem.Title>
+              <ListItem.Subtitle>{course.chauffeurId}</ListItem.Subtitle>
             </ListItem.Content>
             <ListItem.Chevron/>
           </ListItem>
